@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokédex</title>
+</head>
+<body>
+    <a href="./detail.html">Informations du Pokémon :</a>
+    <div id='grid'></div>
+</body>
+</html>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    body{
+        background: url(image.jpg)
+        no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        height: 100vh;
+        width: 100vw;
+        justify-content: center;
+        font-family: 'Roboto', sans-serif;
+        color: #fff;
+        font-size: 20px;
+        font-weight: 300;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        line-height: 1.2;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    .item{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: solid;
+        
+    }
+    #grid{
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 10px;
+    }
+</style>
+
+<script>
+    const grid = document.getElementById('grid');
+    buildGrid();
+
+    function buildGrid() {
+        fetch('https://pokeapi.co/api/v2/pokemon?limit=151')
+        .then(response => response.json())
+        .then(data => {
+            const results = data.results
+            results.forEach((pokemon, index) => {
+                let pokemonNumber = index + 1;
+                let ceil = document.createElement('div');
+                let imgDom = document.createElement('img');
+                let nameDom = document.createElement('div');
+
+                imgDom.src=`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonNumber}.png`;
+                nameDom.innerText = pokemon.name;
+
+                ceil.classList.add('item');
+                ceil.appendChild(imgDom);
+                ceil.appendChild(nameDom);
+                grid.appendChild(ceil);
+
+                bindEvent(ceil, pokemonNumber);
+            });
+        });
+    }
+
+    function bindEvent(el, pokemonNumber) {
+    el.addEventListener('click', () => {
+        fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonNumber}`)
+        .then(response => response.json())
+        .then(data => {
+            if (el.querySelector('.detail') !== null) {
+                el.querySelector('.detail').remove();
+            }
+            
+            let detailContainerDom = document.createElement('div');
+            let nameAndNumberDom = document.createElement('p');
+            let backDom = document.createElement('img');
+
+            detailContainerDom.appendChild(nameAndNumberDom);
+            detailContainerDom.appendChild(backDom);
+
+            detailContainerDom.classList.add('detail');
+            nameAndNumberDom.innerText = data.name + ' ('+data.id+')';
+            backDom.src = data.sprites.back_default;
+            
+            el.appendChild(detailContainerDom);
+
+            //Ouvrir une nouvelle page avec les informations du pokémon
+            let indexDiv = data.id;
+            let imageFrontDiv = data.sprites.front_default;
+            let imageBackDiv = data.sprites.back_default;
+            let nameDiv = data.name;
+
+            window.open(`detail.html?index=${indexDiv}&image_front=${imageFrontDiv}&image_back=${imageBackDiv}&name=${nameDiv}`);
+        });
+    });
+}
+
+</script>
