@@ -1,4 +1,1 @@
-# pokedexDeBaseFini
-Mon pokédex de base terminé
-
-Lien du pokédex : https://brainfeed-1996.github.io/pokedexDeBaseFini/?fbclid=IwAR1KzV1gz2OdYWJOIM1fRSOYmgsq8EeF0O6px0AMhgyJ8kZlxg02jzESMYI
+# Deprecated / Consolidated\n\nThis repository has been consolidated into:\n\n- **ultimate-pokedex-collection** → https://github.com/Brainfeed-1996/ultimate-pokedex-collection\n\nThis repo is kept for historical reference and is archived.\n
